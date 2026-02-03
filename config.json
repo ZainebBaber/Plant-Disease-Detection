@@ -1,0 +1,12 @@
+{
+    "data_dir": "data/raw/PlantVillage",
+    "classes": [
+        "Pepper__bell___healthy",
+        "Pepper__bell___Bacterial_spot"
+    ],
+    "batch_size": 32,
+    "epochs": 5,
+    "learning_rate": 0.001,
+    "image_size": 224,
+    "device": "cuda"
+}

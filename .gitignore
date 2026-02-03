@@ -1,0 +1,17 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+.env
+
+# Datasets (raw + processed)
+data/
+dataset/
+
+# Model weights
+*.pt
+*.pth
+
+# OS files
+.DS_Store
