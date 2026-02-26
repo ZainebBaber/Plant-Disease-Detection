@@ -76,7 +76,9 @@ class Trainer:
                 f"Train Acc={self.train_accs[-1]:.3f}, "
                 f"Val Acc={self.val_accs[-1]:.3f}")
             # ===== SAVE BEST MODEL =====
-            epoch_val_loss = sum(self.val_losses) / len(self.val_losses)  # mean validation loss for the epoch
+            epoch_val_loss = sum(self.val_losses) / len(self.val_losses)
+
+            #epoch_val_loss = running_loss / len(self.val_loader)  # mean validation loss for the epoch
 
             if epoch_val_loss < self.best_val_loss:
                 self.best_val_loss = epoch_val_loss

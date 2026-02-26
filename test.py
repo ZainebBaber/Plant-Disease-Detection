@@ -1,11 +1,12 @@
 # test.py
+import numpy as np
 import torch
 import json
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-from model.PlantCnn_model import PlantCNN
+import torch.nn.functional as F
+from model_architecture.PlantCnn_model import PlantCNN
 from data.data_loader import get_dataloaders
 from utils.util import show_test_predictions
 
@@ -43,10 +44,18 @@ def main():
             labels = labels.to(device)
 
             outputs = model(images)
-            _, preds = torch.max(outputs, 1)
+            print("\ntest_outputs: ", outputs)
+            probs=F.softmax(outputs, dim=1)
+            print("\nProbs:" ,probs)
+            _, preds = torch.max(probs, 1)
 
-            all_preds.extend(preds.cpu().numpy())
+            
+            all_preds.extend(preds.cpu().numpy())        
             all_labels.extend(labels.cpu().numpy())
+
+    all_pred=np.array(all_preds)
+    unique,counts=np.unique(all_preds, return_counts=True)
+    print(dict(zip(unique, counts)))
 
     # ===== Metrics =====
     acc = accuracy_score(all_labels, all_preds)
@@ -61,27 +70,36 @@ def main():
     print(f"F1-score  : {f1:.4f}")
 
     # ===== Confusion Matrix =====
-    cm = confusion_matrix(all_labels, all_preds)
+    # cm = confusion_matrix(all_labels, all_preds)
 
-    plt.figure(figsize=(6, 5))
-    sns.heatmap(
-        cm,
-        annot=True,
-        fmt="d",
-        cmap="Blues",
-        xticklabels=config["classes"],
-        yticklabels=config["classes"]
-    )
-    plt.xlabel("Predicted")
-    plt.ylabel("Actual")
-    plt.title("Confusion Matrix")
-    plt.show()
+    # plt.figure(figsize=(6, 5))
+    # sns.heatmap(
+    #     cm,
+    #     annot=True,
+    #     fmt="d",
+    #     cmap="Blues",
+    #     xticklabels=config["classes"],
+    #     yticklabels=config["classes"]
+    # )
+    # plt.xlabel("Predicted")
+    # plt.ylabel("Actual")
+    # plt.title("Confusion Matrix")
+    # plt.show()
+
+
+
+    with open("saved/models/class_mapping.json") as f:
+        class_to_idx = json.load(f)
+
+# Reverse mapping
+    idx_to_class = {v: k for k, v in class_to_idx.items()}
+    classes_ordered = [idx_to_class[i] for i in range(len(idx_to_class))]
 
     # ===== Show sample predictions =====
     show_test_predictions(
         model=model,
         dataset=test_loader.dataset,
-        classes=config["classes"],
+        classes=classes_ordered,
         device=device,
         num_images=6
     )

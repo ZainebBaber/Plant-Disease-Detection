@@ -21,6 +21,8 @@ def plot_curves(train_losses, val_losses, train_accs, val_accs):
 
     plt.show()
 
+
+
 def evaluate_model(model, test_loader, device, classes):
     all_preds = []
     all_labels = []

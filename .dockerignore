@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.git
+.env
+data/
+dataset/
+logger/
+trainer/
+utils/
+config.json
+test.py
