@@ -1,6 +1,6 @@
 
 **Project Overview**
-This project implements a Convolutional Neural Network (CNN) to classify Pepper/Bell plant images into healthy or diseased categories. The model is trained on a curated dataset, and data preprocessing includes **duplicate removal, stratified splitting, and data augmentation** to improve generalization.
+This project implements a Convolutional Neural Network (CNN) to classify Pepper/Bell plant images into healthy or diseased categories. The model is trained on a curated dataset, and data preprocessing includes **duplicate removal, stratified splitting, and data augmentation** to improve generalization.The system now supports real-time predictions via FastAPI, an interactive frontend using Streamlit, and Docker deployment for easy setup.
 
 The pipeline supports:
 
@@ -10,6 +10,9 @@ The pipeline supports:
 * Training a CNN model with PyTorch
 * Visualizing metrics and confusion matrices
 * Testing on a dedicated test set
+* Real-time API: FastAPI endpoint /predict for inference
+* Interactive frontend: Streamlit app to upload images and get predictions
+* Dockerized deployment: Run the API and frontend without manual setup
 
 
   **Dataset**
@@ -30,6 +33,9 @@ The dataset is first cleaned from duplicate images and then split into `train`, 
 * Metrics computed on the test set: Accuracy, Precision, Recall, F1-score
 * Confusion matrix visualization
 * Sample predictions visualization
+* FastAPI endpoint /predict for inference
+* Streamlit app to upload images and get predictions
+* Run the API and frontend without manual setup
 
 ## Usage
 
@@ -65,6 +71,30 @@ This will:
 * Compute metrics: Accuracy, Precision, Recall, F1-score
 * Display a confusion matrix and sample predictions
 
+## 3. Running the FastAPI Backend
+uvicorn api.main:app --reload
+
+API endpoint: POST /predict
+
+Upload an image (jpg, png, jpeg) to get disease prediction and confidence
+
+## 4. Running the Streamlit Frontend
+streamlit run streamlit_app.py
+
+Upload a leaf image
+
+See the predicted class and confidence
+
+Interacts with the FastAPI backend in real-time
+
+## 5. Running via Docker
+
+Build the image:
+
+docker build -t pepper-bell-disease .
+
+Run the container:
+
 ## Project Structure
 
 ```
@@ -87,6 +117,11 @@ pepper-bell-classification/
 │   └── visualization.py    # Metrics and plots
 ├── saved/
 │   └── models/             # Best model saved here
+├── api/
+    └──load_model.py
+    └──main.py
+├── Dockerfile                 # Docker setup
+├── .dockerignore
 ├── train.py
 ├── test.py
 ├── config.json             # Hyperparameters and paths
